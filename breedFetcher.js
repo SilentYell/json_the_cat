@@ -1,10 +1,6 @@
 const needle = require('needle');
-const fs = require('fs');
-
-// const breedName = process.argv[2];
 
 const fetchBreedDescription = function(breedName, callback) {
-
   const url = `https://api.thecatapi.com/v1/breeds/search?q=${breedName}`;
   
   needle.get(url, (error, response) => {
@@ -21,7 +17,6 @@ const fetchBreedDescription = function(breedName, callback) {
       } else {
         callback('Breed not found', null);
       }
-
     } else {
       callback(`Failed with status code: ${response.statusCode}`, null);
     }
