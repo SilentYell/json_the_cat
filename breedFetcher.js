@@ -1,8 +1,8 @@
 const needle = require('needle');
 const fs = require('fs');
 
-
-const url = 'https://api.thecatapi.com/v1/breeds/search?q=sib';
+const breedName = process.argv[2];
+const url = `https://api.thecatapi.com/v1/breeds/search?q=${breedName}`;
 
 needle.get(url, (error, response) => {
   if (error) {
@@ -12,9 +12,16 @@ needle.get(url, (error, response) => {
   }
 
   if (response.statusCode === 200) {
-    fs.writeFile('./catBreedData.json', JSON.stringify(response.body, null, 2), (err) => {
-      if (err) console.log('Write error:', err);
-      else console.log('Successfully wrote to catBreedData.json');
-    });
+    const data = response.body[0];
+
+    if (data) {
+      console.log(data.description);
+      fs.writeFile('./catBreedData.json', JSON.stringify(response.body, null, 2), (err) => {
+        if (err) console.log('Write error:', err);
+        else console.log('Successfully wrote to catBreedData.json');
+      });
+    } else {
+      console.log('Breed not found.');
+    }
   }
 });
